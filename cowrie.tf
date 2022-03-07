@@ -22,9 +22,9 @@ resource "aws_security_group" "cowrie_honeypot_exposed" {
   }
 
   egress {
-    from_port = 0
-    to_port  = 0
-    protocol = -1
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -38,7 +38,6 @@ resource "aws_instance" "cowrieTF" {
     Name = "CowrieViaTF"
   }
 
-  # key_name = var.ssh_key_name
   key_name = aws_key_pair.cowrie_key.key_name
 
   vpc_security_group_ids = [
@@ -46,17 +45,13 @@ resource "aws_instance" "cowrieTF" {
   ]
 
   user_data = data.template_file.cowrie_user_data.rendered
-#  lifecycle {
-#    ignore_changes = [user_data]
-#  }
+  lifecycle {
+    ignore_changes = [user_data]
+  }
 }
 
 output "Cowrie_IP" {
-  value = "${aws_instance.cowrieTF.public_ip}"
-}
-
-output "Cowrie_Admin_SSH" {
-  value = "ssh -i <wherever-you-output-private-key>.pem -p 22222 ubuntu@${aws_instance.cowrieTF.public_ip}"
+  value = aws_instance.cowrieTF.public_ip
 }
 
 output "Cowrie_HoneyPot_SSH" {
