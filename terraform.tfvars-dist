@@ -1,5 +1,0 @@
-# YOUR source IP address
-admin_ip = "a.b.c.d/32"
-
-# YOUR *pre-existing* SSH key name
-ssh_key_name = "HP-default"
