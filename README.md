@@ -3,6 +3,8 @@
 * Console access via AWS' SSM:Connect
 * Deploys "out of the box", standalone Cowrie instance
 
+*See https://github.com/cowrie/cowrie for all operational details*
+
 ## (Manual) Deployment Testing
 1. Run the SSH command contained within output *Cowris_HoneyPot_SSH*
     * Console should request interactive password
