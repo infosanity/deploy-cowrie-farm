@@ -10,24 +10,6 @@ data "template_file" "cowrie_user_data" {
   template = file("${path.module}/cowrie-install.sh")
 }
 
-resource "aws_security_group" "allow_becl46" {
-  name        = "Allow BECL46 Admin"
-  description = "Allow Admin"
-  ingress {
-    from_port   = 22222
-    to_port     = 22222
-    protocol    = "tcp"
-    cidr_blocks = [var.admin_ip]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_security_group" "cowrie_honeypot_exposed" {
   name        = "Cowrie Honeypot Ports"
   description = "Public access to Cowrie honeypot port(s)"
@@ -38,33 +20,45 @@ resource "aws_security_group" "cowrie_honeypot_exposed" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  egress {
+    from_port = 0
+    to_port  = 0
+    protocol = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
-resource "aws_instance" "CowrieTFWIP" {
-  ami           = "ami-02df9ea15c1778c9c" #Ubuntu 18.04 LTS
-  instance_type = "t3.micro"
+resource "aws_instance" "cowrieTF" {
+  ami                  = data.aws_ami.ubuntu.id
+  instance_type        = "t3.micro"
+  iam_instance_profile = aws_iam_instance_profile.ssm_managed_honeypot_profile.name
 
   tags = {
     Name = "CowrieViaTF"
   }
 
-  key_name = "HP-default"
+  # key_name = var.ssh_key_name
+  key_name = aws_key_pair.cowrie_key.key_name
 
-  vpc_security_group_ids = ["${aws_security_group.allow_becl46.id}",
+  vpc_security_group_ids = [
     "${aws_security_group.cowrie_honeypot_exposed.id}"
   ]
 
   user_data = data.template_file.cowrie_user_data.rendered
+#  lifecycle {
+#    ignore_changes = [user_data]
+#  }
 }
 
 output "Cowrie_IP" {
-  value = ["${aws_instance.CowrieTFWIP.public_ip}"]
+  value = "${aws_instance.cowrieTF.public_ip}"
 }
 
 output "Cowrie_Admin_SSH" {
-  value = "ssh -i HP-default.pem -p 22222 ubuntu@${aws_instance.CowrieTFWIP.public_ip}"
+  value = "ssh -i <wherever-you-output-private-key>.pem -p 22222 ubuntu@${aws_instance.cowrieTF.public_ip}"
 }
 
 output "Cowrie_HoneyPot_SSH" {
-  value = "ssh testuser@${aws_instance.CowrieTFWIP.public_ip}"
+  value = "ssh testuser@${aws_instance.cowrieTF.public_ip}"
 }
