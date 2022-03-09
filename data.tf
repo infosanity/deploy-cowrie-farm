@@ -25,7 +25,7 @@ data "aws_ami" "amaz2" {
 }
 
 data "template_file" "cowrie_cfg" {
-  template = file("${path.module}/policy/cowrie.cfg.tpl")
+  template = file("${path.module}/cowrie_modifications/cowrie.cfg.tpl")
   vars = {
     hostname = "alpha-build-03"
   }
@@ -39,5 +39,5 @@ data "template_file" "iam_instance_profile" {
 }
 
 data "template_file" "cowrie_install_script" {
-  template = file("${path.module}/cowrie-install.tpl")
+  template = file("${path.module}/install_scripts/cowrie_install.tpl")
 }
