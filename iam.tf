@@ -25,5 +25,5 @@ resource "aws_iam_instance_profile" "ssm_managed_honeypot_profile" {
 resource "aws_iam_role_policy" "ssm_managed_honeypot_role_policy" {
   name   = "ssm_managed_honeypot_role_policy"
   role   = aws_iam_role.ssm_managed_honeypot_role.id
-  policy = file("policy/ssm_instance_profile.json")
+  policy = data.template_file.iam_instance_profile.rendered
 }

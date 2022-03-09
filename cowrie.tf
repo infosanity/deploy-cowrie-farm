@@ -44,7 +44,7 @@ resource "aws_instance" "cowrieTF" {
     "${aws_security_group.cowrie_honeypot_exposed.id}"
   ]
 
-  user_data = data.template_file.cowrie_user_data.rendered
+  user_data = data.template_file.cowrie_install_script.rendered
   lifecycle {
     ignore_changes = [user_data]
   }

@@ -23,3 +23,21 @@ data "aws_ami" "amaz2" {
   }
   owners = ["amazon"]
 }
+
+data "template_file" "cowrie_cfg" {
+  template = file("${path.module}/cowrie_modifications/cowrie.cfg.tpl")
+  vars = {
+    hostname = "alpha-build-03"
+  }
+}
+
+data "template_file" "iam_instance_profile" {
+  template = file("${path.module}/policy/ssm_instance_profile.json.tpl")
+  vars = {
+    ssm_cowrie_cfg = aws_ssm_parameter.cowrie_cfg.arn
+  }
+}
+
+data "template_file" "cowrie_install_script" {
+  template = file("${path.module}/install_scripts/cowrie_install.tpl")
+}
