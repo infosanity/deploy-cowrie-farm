@@ -43,6 +43,13 @@
                 "ec2messages:SendReply"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParameters"
+            ],
+            "Resource":"${ssm_cowrie_cfg}"
         }
     ]
 }

@@ -25,6 +25,7 @@ git clone http://github.com/cowrie/cowrie
 cd /home/cowrie/cowrie
 virtualenv --python=python3 cowrie-env
 source cowrie-env/bin/activate
+aws --region eu-west-1 ssm get-parameter --name "/honeypot/cowrie/cowrie.cfg" | jq -r ".Parameter.Value" > etc/cowrie.cfg
 pip install --upgrade pip
 pip install --upgrade -r requirements.txt
 bin/cowrie start
