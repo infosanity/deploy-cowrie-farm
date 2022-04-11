@@ -28,6 +28,7 @@ source cowrie-env/bin/activate
 aws --region eu-west-1 ssm get-parameter --name "/honeypot/cowrie/cowrie.cfg" | jq -r ".Parameter.Value" > etc/cowrie.cfg
 pip install --upgrade pip
 pip install --upgrade -r requirements.txt
+pip install --upgrade -r requirements-output.txt
 bin/cowrie start
 EOF
 # runs with cowrie.cfg.dist - will need tuning to specific usecase

@@ -122,10 +122,10 @@ token = slack_token_for_your_bot
 debug = false
 
 [output_s3]
-enabled = false
-access_key_id = AKIDEXAMPLE
-secret_access_key = wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY
-bucket = my-cowrie-bucket
+enabled = true
+#access_key_id = AKIDEXAMPLE
+#secret_access_key = wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY
+bucket = ${s3_bucket}
 region = eu-west-1
 
 [output_reversedns]

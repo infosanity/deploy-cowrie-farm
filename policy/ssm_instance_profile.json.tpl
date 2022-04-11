@@ -50,6 +50,16 @@
                 "ssm:GetParameters"
             ],
             "Resource":"${ssm_cowrie_cfg}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "${s3_bucket}",
+                "${s3_bucket}/*"
+            ]
         }
     ]
 }

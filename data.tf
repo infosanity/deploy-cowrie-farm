@@ -27,14 +27,16 @@ data "aws_ami" "amaz2" {
 data "template_file" "cowrie_cfg" {
   template = file("${path.module}/cowrie_modifications/cowrie.cfg.tpl")
   vars = {
-    hostname = "alpha-build-03"
+    hostname  = "alpha-build-03",
+    s3_bucket = aws_s3_bucket.output.bucket
   }
 }
 
 data "template_file" "iam_instance_profile" {
   template = file("${path.module}/policy/ssm_instance_profile.json.tpl")
   vars = {
-    ssm_cowrie_cfg = aws_ssm_parameter.cowrie_cfg.arn
+    ssm_cowrie_cfg = aws_ssm_parameter.cowrie_cfg.arn,
+    s3_bucket = aws_s3_bucket.output.arn
   }
 }
 
